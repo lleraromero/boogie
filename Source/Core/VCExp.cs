@@ -216,8 +216,9 @@ The generic options may or may not be used by the prover plugin.
       if (proverName.IndexOf("/") > 0 || proverName.IndexOf("\\") > 0) {
         path = proverName;
       } else {
-        string codebase = cce.NonNull(System.IO.Path.GetDirectoryName(
-                                 cce.NonNull(System.Reflection.Assembly.GetExecutingAssembly().Location)));
+        var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+        var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+        string codebase = cce.NonNull(System.IO.Path.GetDirectoryName(cce.NonNull(codeBasePath)));
         path = System.IO.Path.Combine(codebase, "Provers." + proverName + ".dll");
       }
       Assembly asm = cce.NonNull(Assembly.LoadFrom(path));

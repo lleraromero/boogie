@@ -22,7 +22,9 @@ namespace Microsoft.Boogie.SMTLib
         static string CodebaseString()
         {
             Contract.Ensures(Contract.Result<string>() != null);
-            return Path.GetDirectoryName(cce.NonNull(System.Reflection.Assembly.GetExecutingAssembly().Location));
+            var codeBaseUrl = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
+            return Path.GetDirectoryName(cce.NonNull(codeBasePath));
         }
 
         public static string ExecutablePath()
